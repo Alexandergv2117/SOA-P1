@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Repository.Context;
 using Repository.DAO;
 using Service.IServices;
@@ -16,13 +17,15 @@ namespace Service.Service
     public class SendEmailService: ISendEmail
     {
         private readonly ILogger<SendEmailService> _logger;
+        private readonly IPersona _persona;
+
         private string emailOrigin = "roboga2117dev@gmail.com";
-        private string emailAddress = "roboga2117dev@gmail.com";
         private string password = "yuifqahrhnvbyodv";
 
-        public SendEmailService(ILogger<SendEmailService> logger)
+        public SendEmailService(ILogger<SendEmailService> logger, IPersona persona)
         {
             _logger = logger;
+            _persona = persona;
         }
 
         public string EnviarCorreo() 
@@ -31,17 +34,23 @@ namespace Service.Service
 
             try
             {
-                MailMessage mailMessage = new MailMessage(emailOrigin, emailAddress, "Camara mi niño", "<b>Pongase chupas</b>");
-
-                mailMessage.IsBodyHtml = true;
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
-                smtpClient.Host = "smtp.gmail.com";
                 smtpClient.Port = 587;
                 smtpClient.Credentials = new System.Net.NetworkCredential(emailOrigin, password);
 
-                smtpClient.Send(mailMessage);
+                List<EmpleadoVM> empleadoVMs = _persona.ObtenerEmpleados();
+
+                empleadoVMs.ForEach(empleadoVM =>
+                {
+                    MailMessage mailMessage = new MailMessage(emailOrigin, empleadoVM.Email);
+                    mailMessage.Subject = "Bienvenido a SOA-P1-29AV";
+                    mailMessage.Body = $"<h2>Te damos a la bienvenida a SOA-P1-28AV</h2><br><b>{empleadoVM.Nombre} {empleadoVM.apellidos}</b>";
+                    mailMessage.IsBodyHtml = true;
+                    smtpClient.Send(mailMessage);
+                });
+
                 smtpClient.Dispose();
 
                 response = "Enviado";
