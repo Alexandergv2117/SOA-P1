@@ -46,7 +46,7 @@ namespace Service.Service
                 {
                     MailMessage mailMessage = new MailMessage(emailOrigin, empleadoVM.Email);
                     mailMessage.Subject = "Bienvenido a SOA-P1-29AV";
-                    mailMessage.Body = $"<h2>Te damos a la bienvenida a SOA-P1-28AV</h2><br><b>{empleadoVM.Nombre} {empleadoVM.apellidos}</b>";
+                    mailMessage.Body = $"<h2>Te damos a la bienvenida a SOA-P1-28AV</h2><br><b>{empleadoVM.Nombre} {empleadoVM}</b>";
                     mailMessage.IsBodyHtml = true;
                     smtpClient.Send(mailMessage);
                 });
@@ -54,9 +54,10 @@ namespace Service.Service
                 smtpClient.Dispose();
 
                 response = "Enviado";
-            } catch (Exception ex)
+            } catch (Exception e)
             {
-                response = ex.Message;
+                response = e.Message;
+                _logger.LogError(e.Message);
             }
 
             return response;
