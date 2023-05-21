@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Repository.Context;
 using Service.IServices;
+using Service.Service;
 using Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<ApplicationDbContext>
     (options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IPersona, PersonaServicio>();
+builder.Services.AddTransient<ISendEmail, SendEmailService>();
+builder.Services.AddTransient<IValidEmail, ValidEmailService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
