@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Repository.Context;
 using Repository.DAO;
@@ -18,19 +19,20 @@ namespace Service.Service
     {
         private readonly ILogger<SendEmailService> _logger;
         private readonly IPersona _persona;
+        private readonly IConfiguration _configuration;
 
-        private string emailOrigin = "roboga2117dev@gmail.com";
-        private string password = "yuifqahrhnvbyodv";
-
-        public SendEmailService(ILogger<SendEmailService> logger, IPersona persona)
+        public SendEmailService(ILogger<SendEmailService> logger, IPersona persona, IConfiguration configuration)
         {
             _logger = logger;
             _persona = persona;
+            _configuration = configuration;
         }
 
-        public string EnviarCorreo() 
+        public List<string> EnviarCorreo() 
         {
-            string response = "";
+            List<string> response = new List<string>();
+            string emailOrigin = _configuration.GetSection("EmailCredentials:email").Value;
+            string password = _configuration.GetSection("EmailCredentials:password").Value;
 
             try
             {
@@ -49,14 +51,14 @@ namespace Service.Service
                     mailMessage.Body = $"<h2>Te damos a la bienvenida a SOA-P1-28AV</h2><br><b>{empleadoVM.Nombre} {empleadoVM.apellidos}</b>";
                     mailMessage.IsBodyHtml = true;
                     smtpClient.Send(mailMessage);
+                    response.Add($"Correo enviado a {empleadoVM.Nombre} {empleadoVM.apellidos} Correo: {empleadoVM.Email}");
                 });
 
                 smtpClient.Dispose();
 
-                response = "Enviado";
             } catch (Exception e)
             {
-                response = e.Message;
+                response.Add(e.Message);
                 _logger.LogError(e.Message);
             }
 
