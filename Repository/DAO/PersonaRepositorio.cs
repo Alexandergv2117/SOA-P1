@@ -22,11 +22,6 @@ namespace Repository.DAO
         public List<Persona> ObtenerLista()
         {
             List<Persona> lista = new List<Persona>();
-            //DateTime Fecha = new DateTime(1998, 01, 15);
-            //lista.Add(new Persona() {Id = 1, Name = "Jonathan", Lastname ="Valdes" , CURP = "VASJ980125HQRLNN00", RFC = "VASJ980125PU9", FechaNacimiento= Fecha });
-            //lista.Add(new Persona() { Id = 2, Name = "Eduardo", Lastname = "Pastelin", CURP = "VASJ980125HQRLNN00", RFC = "VASJ980125PU9", FechaNacimiento = Fecha });
-            //lista.Add(new Persona() { Id = 3, Name = "Sofia", Lastname = "Carolina", CURP = "VASJ980125HQRLNN00", RFC = "VASJ980125PU9", FechaNacimiento = Fecha });
-            //lista.Add(new Persona() { Id = 4, Name = "Yair", Lastname = "Casas", CURP = "VASJ980125HQRLNN00", RFC = "VASJ980125PU9", FechaNacimiento = Fecha });
             
             lista = _context.Personas.ToList(); 
 

@@ -9,6 +9,6 @@ namespace Service.IServices
 {
     public interface ISendEmail
     {
-        string EnviarCorreo();
+        List<string> EnviarCorreo();
     }
 }
