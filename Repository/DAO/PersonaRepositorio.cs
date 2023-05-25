@@ -36,5 +36,11 @@ namespace Repository.DAO
 
             return list;
         }
+
+        public bool validCredentials(string  email, string password)
+        {
+            bool isValid = _context.Empleados.Any(e => e.Correo == email && e.password == password);
+            return isValid;
+        }
     }
 }

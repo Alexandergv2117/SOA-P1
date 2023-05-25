@@ -13,7 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>
 
 builder.Services.AddTransient<IPersona, PersonaServicio>();
 builder.Services.AddTransient<ISendEmail, SendEmailService>();
-builder.Services.AddTransient<IValidEmail, ValidEmailService>();
+builder.Services.AddTransient<IAuth, AuthService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
