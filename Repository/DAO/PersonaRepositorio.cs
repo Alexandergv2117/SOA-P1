@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repository.Context;
+using System.Security.Cryptography;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,8 +40,16 @@ namespace Repository.DAO
 
         public bool validCredentials(string  email, string password)
         {
-            bool isValid = _context.Empleados.Any(e => e.Correo == email && e.password == password);
-            return isValid;
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                string passEncrypted = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+                Console.WriteLine("Contraseña encriptada: " + passEncrypted);
+
+                bool isValid = _context.Empleados.Any(e => e.Correo == email && e.password == passEncrypted);
+                return isValid;
+            }
         }
     }
 }
