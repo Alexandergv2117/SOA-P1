@@ -45,7 +45,6 @@ namespace Repository.DAO
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
 
                 string passEncrypted = BitConverter.ToString(bytes).Replace("-", "").ToLower();
-                Console.WriteLine("Contraseña encriptada: " + passEncrypted);
 
                 bool isValid = _context.Empleados.Any(e => e.Correo == email && e.password == passEncrypted);
                 return isValid;
